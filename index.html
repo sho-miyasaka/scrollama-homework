@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Scrollama: Asian Charactors</title>
+    <meta name="description" content="Scrollama: Sticky Overlay Example" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      #scrolly {
+        position: relative;
+        background-color: #f3f3f3;
+        padding: 1rem;
+      }
+
+      article {
+        position: relative;
+        padding: 0;
+        max-width: 20rem;
+        margin: 0 auto;
+      }
+
+      .sticky-thing {
+        position: -webkit-sticky;
+        position: sticky;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        background-color: #8a8a8a;
+        z-index: 0;
+        top: 12.5vh;
+        height: 75vh;
+        /* Center everything inside */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: url('images/tokyo-railway-station-business-district-building-night-japan.jpg');
+        background-size: cover;
+        background-position: 50% 50%;
+      }
+
+      .sticky-thing p {
+        font-size: 8rem;
+        font-weight: 900;
+        color: #fff;
+      }
+
+      .step {
+        margin: 0 auto 12rem auto;
+        margin-bottom: 12rem;
+        color: #fff;
+        background-color: rgba(0, 0, 0, 0);
+      }
+
+      .step:last-child {
+        margin-bottom: 0;
+      }
+
+      .step.is-active p {
+        background-color: rgba(218, 165, 32, 0.85);
+        color: #3b3b3b;
+      }
+      .step p {
+        text-align: center;
+        padding: 1rem;
+        font-size: 1.5rem;
+        background-color: #3b3b3b88;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <!-- <nav>
+        <a href="https://github.com/russellgoldenberg/scrollama">scrollama.js</a>
+        <div class="nav__examples">
+          <p>Examples:</p>
+          <a href="basic.html">Basic</a>
+          <a href="progress.html">Progress</a>
+          <a href="sticky-side.html">Sticky Side</a>
+          <a href="sticky-overlay.html">Sticky Overlay</a>
+        </div>
+      </nav> -->
+      <section id="intro">
+        <h1 class="intro__hed">Characters in East Asian languages</h1>
+        <p class="intro__dek">
+          Start scrolling to see.
+        </p>
+      </section>
+
+      <section id="scrolly">
+        <div class="sticky-thing">
+          <p>0</p>
+        </div>
+
+        <article>
+          <div class="step" data-step="1" data-color= "grey" data-image="url('images/shanghai-skyline.jpg')">
+            <p>这是简体中文</p>
+            <p>Simplified Chinese characters are common in mainland China. People use characters with fewer strokes than traditional one.</p>
+          </div>
+          <div class="step" data-step="2" data-color="white" data-image="url('images/hong-kong-skyline.jpg')">
+            <p>這是繁體中文</p>
+            <p>People in Hong Kong and Taiwan use traditional Chinese characters. These have more strokes than simplified characters. We can find these in New York City's Chinatown as well.</p>
+          </div>
+          <div class="step" data-step="3" data-color="grey" data-image="url('images/aerial-view-tokyo-cityscape-with-fuji-mountain-japan.jpg')">
+            <p>これは日本語です</p>
+            <p>The Japanese language has three types of characters. Kanji, which come from China, and Hiragana and Katakana, which are phonetic characters.</p>
+          </div>
+          <div class="step" data-step="4" data-color="white" data-image="url('images/downtown-cityscape-night-seoul-south-korea.jpg')">
+            <p>이것은 한글입니다</p>
+            <p>The Korean language uses the phonetic Hangul alphabet. Like Japanese, there are many words that can be written in Chinese characters.</p>
+          <!-- <div class="step" data-step="5" data-color="white" data-image="url('images/wat-arun-temple-twilight-bangkok-thailand.jpg')">
+            <p>นี่คือสคริปต์ภาษาไทย</p>
+          <div class="step" data-step="6" data-color="white" data-image="url('images/elephant')">
+            <p>මේක සිංහල</p>          -->
+          </div>
+        </article>
+      </section>
+
+      <section id="outro"></section>
+    </main>
+
+    <!-- <div class='debug'></div> -->
+    <script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
+    <script src="https://unpkg.com/scrollama"></script>
+    <script>
+      // DOM - document object model
+      var main = document.querySelector("main");
+      var scrolly = main.querySelector("#scrolly");
+      var sticky = scrolly.querySelector(".sticky-thing");
+      var article = scrolly.querySelector("article");
+      var steps = article.querySelectorAll(".step");
+
+      // initialize the scrollama
+      var scroller = scrollama();
+
+      // scrollama event handlers
+      function handleStepEnter(response) {
+        // response = { element, direction, index }
+        var el = response.element;
+
+        // remove is-active from all steps
+        // then add is-active to this step
+        steps.forEach(step => step.classList.remove('is-active'));
+        el.classList.add('is-active');
+
+        // update graphic based on step
+        sticky.querySelector("p").innerText = el.dataset.step;
+        sticky.style.backgroundColor = el.dataset.color;
+        //tuika
+        sticky.style.backgroundImage = el.dataset.image;
+      }
+
+      function init() {
+        // 2. setup the scroller passing options
+        // 		this will also initialize trigger observations
+        // 3. bind scrollama event handlers (this can be chained like below)
+        scroller
+          .setup({
+            step: "#scrolly article .step",
+            offset: 0.33,
+            debug: false
+          })
+          .onStepEnter(handleStepEnter);
+
+        // setup resize event
+        window.addEventListener("resize", scroller.resize);
+      }
+
+      // kick things off
+      init();
+    </script>
+  </body>
+</html>
